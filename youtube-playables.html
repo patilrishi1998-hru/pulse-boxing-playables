@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YouTube Playables · Pulse: Boxing Career</title>
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+    <style>
+      :root {
+        --yt-bg: #0f0f0f;
+        --yt-surface: #181818;
+        --yt-elevated: #212121;
+        --yt-border: rgba(255, 255, 255, 0.12);
+        --yt-red: #ff0033;
+        --yt-mint: #2ba640;
+        --yt-gold: #f5c542;
+        --yt-text: #f1f1f1;
+        --yt-muted: #aaaaaa;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        background: var(--yt-bg);
+        color: var(--yt-text);
+        font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        overflow: hidden;
+      }
+      /* Top YouTube Playables Header */
+      .yt-header {
+        height: 54px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        background: var(--yt-surface);
+        border-bottom: 1px solid var(--yt-border);
+        gap: 12px;
+      }
+      .yt-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .yt-logo-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 6px;
+        background: var(--yt-red);
+        color: #fff;
+        font-weight: 800;
+        font-size: 12px;
+        letter-spacing: 0.03em;
+      }
+      .yt-game-title {
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .yt-game-sub {
+        font-size: 11px;
+        color: var(--yt-muted);
+        padding: 2px 8px;
+        border-radius: 99px;
+        background: rgba(43, 166, 64, 0.18);
+        color: #6ee787;
+        border: 1px solid rgba(43, 166, 64, 0.4);
+        font-weight: 600;
+      }
+      .yt-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .yt-btn {
+        appearance: none;
+        border: 1px solid var(--yt-border);
+        background: var(--yt-elevated);
+        color: var(--yt-text);
+        padding: 6px 12px;
+        border-radius: 18px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+      .yt-btn:hover {
+        background: #303030;
+        border-color: rgba(255, 255, 255, 0.28);
+      }
+      .yt-btn[data-active="true"] {
+        background: rgba(255, 255, 255, 0.92);
+        color: #0f0f0f;
+        border-color: #fff;
+      }
+      .yt-btn-primary {
+        background: var(--yt-red);
+        border-color: var(--yt-red);
+        color: #fff;
+      }
+      .yt-btn-primary:hover {
+        background: #d9002b;
+      }
+      /* Main Workspace */
+      .yt-main {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        min-height: 0;
+      }
+      .yt-stage-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at 50% 40%, #1c1f2b 0%, #090a0f 100%);
+        padding: 14px;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .yt-frame-shell {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        box-shadow: 0 22px 60px rgba(0, 0, 0, 0.72);
+        background: #101a2c;
+        transition: width 0.22s ease, height 0.22s ease;
+      }
+      .yt-frame-shell[data-viewport="mobile"] {
+        width: min(430px, 100%);
+        height: min(860px, 100%);
+        border-radius: 26px;
+        border: 3px solid rgba(255, 255, 255, 0.22);
+      }
+      .yt-frame-shell[data-viewport="theater"] {
+        width: min(1180px, 100%);
+        height: min(680px, 100%);
+      }
+      iframe#playable-frame {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        display: block;
+      }
+      /* Rewarded Video Ad Overlay inside the Playables Shell */
+      .yt-ad-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 40;
+        background: rgba(8, 10, 16, 0.94);
+        backdrop-filter: blur(8px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        text-align: center;
+      }
+      .yt-ad-overlay[hidden] { display: none; }
+      .yt-ad-card {
+        max-width: 440px;
+        width: 100%;
+        padding: 22px;
+        border-radius: 16px;
+        background: #181b24;
+        border: 1px solid rgba(245, 197, 66, 0.48);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      }
+      .yt-ad-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 99px;
+        background: rgba(245, 197, 66, 0.18);
+        color: var(--yt-gold);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .yt-ad-card h3 {
+        margin: 10px 0 6px;
+        font-size: 20px;
+      }
+      .yt-ad-card p {
+        margin: 0 0 14px;
+        font-size: 13px;
+        color: #c7cbd6;
+        line-height: 1.45;
+      }
+      .yt-ad-progress {
+        height: 8px;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.12);
+        overflow: hidden;
+        margin-bottom: 16px;
+      }
+      .yt-ad-progress-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #f5c542, #18e2b5);
+        transition: width 0.1s linear;
+      }
+      .yt-ad-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+      /* Right Sidebar: SDK Telemetry & Upload Guide */
+      .yt-sidebar {
+        background: var(--yt-surface);
+        border-left: 1px solid var(--yt-border);
+        padding: 14px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .yt-panel {
+        background: var(--yt-elevated);
+        border: 1px solid var(--yt-border);
+        border-radius: 10px;
+        padding: 12px;
+      }
+      .yt-panel h2 {
+        margin: 0 0 8px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--yt-muted);
+      }
+      .sdk-check-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 12px;
+      }
+      .sdk-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 8px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.26);
+      }
+      .sdk-item code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        color: #e3e7f2;
+      }
+      .sdk-status {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--yt-muted);
+      }
+      .sdk-status[data-ok="true"] {
+        background: rgba(43, 166, 64, 0.22);
+        color: #6ee787;
+      }
+      .sdk-log {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        background: #0b0c10;
+        border: 1px solid var(--yt-border);
+        border-radius: 6px;
+        padding: 8px;
+        max-height: 150px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        color: #b9c2d4;
+      }
+      .upload-steps {
+        margin: 0;
+        padding-left: 18px;
+        font-size: 12px;
+        line-height: 1.5;
+        color: #d6dae4;
+      }
+      .upload-steps li { margin-bottom: 6px; }
+      .url-copy-box {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 6px;
+        background: #0b0c10;
+        padding: 6px 8px;
+        border-radius: 6px;
+        border: 1px solid var(--yt-border);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+      }
+      @media (max-width: 960px) {
+        .yt-main { grid-template-columns: 1fr; }
+        .yt-sidebar { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="yt-header">
+      <div class="yt-brand">
+        <span class="yt-logo-pill">▶ YouTube Playables</span>
+        <span class="yt-game-title">Pulse · Boxing Career</span>
+        <span class="yt-game-sub" id="env-pill">SDK v1 · IN_PLAYABLES_ENV = true</span>
+      </div>
+      <div class="yt-controls">
+        <button class="yt-btn" data-vp="full" data-active="true">🖥️ Full</button>
+        <button class="yt-btn" data-vp="theater">📺 Theater 16:9</button>
+        <button class="yt-btn" data-vp="mobile">📱 Shorts 9:16</button>
+        <button class="yt-btn" id="btn-pause">⏸️ Pause SDK</button>
+        <button class="yt-btn" id="btn-audio">🔊 Audio: ON</button>
+        <button class="yt-btn" id="btn-reload">🔄 Reload Playable</button>
+        <a class="yt-btn yt-btn-primary" href="https://developers.google.com/youtube/gaming/playables/test_suite" target="_blank" rel="noopener">🧪 Open Google Test Suite ↗</a>
+      </div>
+    </header>
+
+    <main class="yt-main">
+      <div class="yt-stage-wrap">
+        <div class="yt-frame-shell" id="frame-shell" data-viewport="full">
+          <iframe id="playable-frame" title="Pulse Boxing Career Playable"></iframe>
+          <div class="yt-ad-overlay" id="ad-overlay" hidden>
+            <div class="yt-ad-card">
+              <span class="yt-ad-badge">YouTube Playables · Rewarded Ad</span>
+              <h3 id="ad-title">Ringside Sponsor Broadcast</h3>
+              <p id="ad-desc">Playing official YouTube Playables rewarded ad spot. Game execution & audio are paused via <code>ytgame.system.onPause</code> until the ad finishes.</p>
+              <div class="yt-ad-progress"><div class="yt-ad-progress-bar" id="ad-bar"></div></div>
+              <div class="yt-ad-actions">
+                <button class="yt-btn yt-btn-primary" id="ad-claim-btn">✅ Complete Ad & Grant Reward</button>
+                <button class="yt-btn" id="ad-skip-btn">✖ Skip Without Reward</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="yt-sidebar">
+        <section class="yt-panel">
+          <h2>YouTube Playables SDK Telemetry</h2>
+          <div class="sdk-check-list">
+            <div class="sdk-item"><code>IN_PLAYABLES_ENV</code><span class="sdk-status" data-ok="true">true</span></div>
+            <div class="sdk-item"><code>game.firstFrameReady()</code><span class="sdk-status" id="st-first">waiting…</span></div>
+            <div class="sdk-item"><code>game.gameReady()</code><span class="sdk-status" id="st-ready">waiting…</span></div>
+            <div class="sdk-item"><code>game.loadData()</code><span class="sdk-status" id="st-load">waiting…</span></div>
+            <div class="sdk-item"><code>game.saveData()</code><span class="sdk-status" id="st-save">0 saves</span></div>
+            <div class="sdk-item"><code>ads.requestRewardedAd()</code><span class="sdk-status" id="st-ads" data-ok="true">ready</span></div>
+            <div class="sdk-item"><code>engagement.sendScore()</code><span class="sdk-status" id="st-score">0 pts</span></div>
+          </div>
+        </section>
+
+        <section class="yt-panel">
+          <h2>Publish to YouTube Playables</h2>
+          <ol class="upload-steps">
+            <li><strong>Test in Google's Official Test Suite:</strong> Click <strong>Open Google Test Suite ↗</strong> above and paste this local URL into <em>Game URL</em>:
+              <div class="url-copy-box">
+                <span id="local-url-text">http://127.0.0.1:5173/</span>
+              </div>
+            </li>
+            <li><strong>Upload ZIP Bundle in Portal:</strong> Open your <strong>YouTube Playables Developer Portal</strong> release page and upload:
+              <div class="url-copy-box">pulse-youtube-playables-bundle.zip (895 KB)</div>
+            </li>
+          </ol>
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+            <a class="yt-btn yt-btn-primary" href="./pulse-youtube-playables-bundle.zip" download="pulse-youtube-playables-bundle.zip">⬇️ Download Playables ZIP (895 KB)</a>
+            <a class="yt-btn" href="https://developers.google.com/youtube/gaming/playables/portal" target="_blank" rel="noopener">📦 Developer Portal Guide ↗</a>
+            <a class="yt-btn" href="./index.html" target="_blank" rel="noopener">🎮 Standalone Tab ↗</a>
+          </div>
+        </section>
+
+        <section class="yt-panel" style="flex:1;display:flex;flex-direction:column;min-height:140px">
+          <h2>Live SDK Event Log</h2>
+          <div class="sdk-log" id="sdk-log"></div>
+        </section>
+      </aside>
+    </main>
+
+    <script>
+      const bootAt = performance.now();
+      const logEl = document.getElementById('sdk-log');
+      function logEvent(msg) {
+        const row = document.createElement('div');
+        const elapsed = ((performance.now() - bootAt) / 1000).toFixed(2);
+        row.textContent = `[+${elapsed}s] ${msg}`;
+        logEl.prepend(row);
+      }
+
+      const pauseListeners = new Set();
+      const resumeListeners = new Set();
+      const audioListeners = new Set();
+      let isPaused = false;
+      let audioEnabled = true;
+      let saveCount = 0;
+      const CLOUD_KEY = 'pulse:yt-playables-cloud:v1';
+
+      const stFirst = document.getElementById('st-first');
+      const stReady = document.getElementById('st-ready');
+      const stLoad = document.getElementById('st-load');
+      const stSave = document.getElementById('st-save');
+      const stAds = document.getElementById('st-ads');
+      const stScore = document.getElementById('st-score');
+
+      const adOverlay = document.getElementById('ad-overlay');
+      const adTitle = document.getElementById('ad-title');
+      const adDesc = document.getElementById('ad-desc');
+      const adBar = document.getElementById('ad-bar');
+      const adClaimBtn = document.getElementById('ad-claim-btn');
+      const adSkipBtn = document.getElementById('ad-skip-btn');
+
+      function setSdkPaused(nextPaused) {
+        if (isPaused === nextPaused) return;
+        isPaused = nextPaused;
+        const btn = document.getElementById('btn-pause');
+        btn.textContent = isPaused ? '▶️ Resume SDK' : '⏸️ Pause SDK';
+        btn.dataset.active = String(isPaused);
+        if (isPaused) {
+          logEvent('system.onPause() dispatched to game');
+          pauseListeners.forEach(fn => { try { fn(); } catch {} });
+        } else {
+          logEvent('system.onResume() dispatched to game');
+          resumeListeners.forEach(fn => { try { fn(); } catch {} });
+        }
+      }
+
+      window.__PULSE_YTGAME_SIM__ = {
+        IN_PLAYABLES_ENV: true,
+        SDK_VERSION: '1.0.0-playables',
+        game: {
+          firstFrameReady() {
+            const ms = Math.round(performance.now() - bootAt);
+            stFirst.textContent = `✓ ${ms}ms`;
+            stFirst.dataset.ok = 'true';
+            logEvent(`game.firstFrameReady() (${ms}ms)`);
+          },
+          gameReady() {
+            const ms = Math.round(performance.now() - bootAt);
+            stReady.textContent = `✓ ${ms}ms`;
+            stReady.dataset.ok = 'true';
+            logEvent(`game.gameReady() (${ms}ms)`);
+          },
+          async loadData() {
+            const raw = localStorage.getItem(CLOUD_KEY) || '';
+            const kb = (new Blob([raw]).size / 1024).toFixed(1);
+            stLoad.textContent = raw ? `✓ ${kb} KB` : '✓ new save';
+            stLoad.dataset.ok = 'true';
+            logEvent(`game.loadData() -> ${kb} KB`);
+            return raw;
+          },
+          async saveData(data) {
+            localStorage.setItem(CLOUD_KEY, data);
+            saveCount += 1;
+            const kb = (new Blob([data]).size / 1024).toFixed(1);
+            stSave.textContent = `✓ ${saveCount} (${kb} KB)`;
+            stSave.dataset.ok = 'true';
+            logEvent(`game.saveData() #${saveCount} (${kb} KB)`);
+          }
+        },
+        system: {
+          isAudioEnabled() { return audioEnabled; },
+          onPause(cb) { pauseListeners.add(cb); return () => pauseListeners.delete(cb); },
+          onResume(cb) { resumeListeners.add(cb); return () => resumeListeners.delete(cb); },
+          onAudioEnabledChange(cb) { audioListeners.add(cb); return () => audioListeners.delete(cb); }
+        },
+        ads: {
+          requestRewardedAd(rewardId) {
+            logEvent(`ads.requestRewardedAd("${rewardId}")`);
+            stAds.textContent = `playing (${rewardId})`;
+            setSdkPaused(true);
+            adTitle.textContent = rewardId === 'sponsor_cash_grant'
+              ? 'Sponsor Broadcast Spot (+250 Cash & +2 Popularity)'
+              : 'Double Purse Bonus Ad (2× Fight / Drill Cash)';
+            adDesc.textContent = `Reward ID: "${rewardId}" · Game paused via ytgame.system.onPause().`;
+            adOverlay.hidden = false;
+            adBar.style.width = '0%';
+            return new Promise(resolve => {
+              let progress = 0;
+              const timer = setInterval(() => {
+                progress = Math.min(100, progress + 5);
+                adBar.style.width = `${progress}%`;
+              }, 100);
+              const finish = (granted) => {
+                clearInterval(timer);
+                adOverlay.hidden = true;
+                stAds.textContent = granted ? `✓ earned (${rewardId})` : `skipped (${rewardId})`;
+                stAds.dataset.ok = String(granted);
+                logEvent(`ads.requestRewardedAd("${rewardId}") -> ${granted}`);
+                resolve(granted);
+                setTimeout(() => setSdkPaused(false), 60);
+              };
+              adClaimBtn.onclick = () => finish(true);
+              adSkipBtn.onclick = () => finish(false);
+            });
+          }
+        },
+        engagement: {
+          async sendScore(scoreObj) {
+            const val = scoreObj && typeof scoreObj.value === 'number' ? scoreObj.value : 0;
+            stScore.textContent = `✓ ${val} pts`;
+            stScore.dataset.ok = 'true';
+            logEvent(`engagement.sendScore({ value: ${val} })`);
+          }
+        }
+      };
+
+      const frame = document.getElementById('playable-frame');
+      frame.src = './index.html?playables_sim=1';
+      const urlText = document.getElementById('local-url-text');
+      if (urlText) urlText.textContent = new URL('./', window.location.href).href;
+
+      document.querySelectorAll('[data-vp]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('[data-vp]').forEach(b => b.dataset.active = 'false');
+          btn.dataset.active = 'true';
+          document.getElementById('frame-shell').dataset.viewport = btn.dataset.vp;
+        });
+      });
+
+      document.getElementById('btn-pause').addEventListener('click', () => setSdkPaused(!isPaused));
+      document.getElementById('btn-audio').addEventListener('click', (e) => {
+        audioEnabled = !audioEnabled;
+        e.currentTarget.textContent = audioEnabled ? '🔊 Audio: ON' : '🔇 Audio: MUTED';
+        logEvent(`system.onAudioEnabledChange(${audioEnabled})`);
+        audioListeners.forEach(fn => { try { fn(audioEnabled); } catch {} });
+      });
+      document.getElementById('btn-reload').addEventListener('click', () => {
+        logEvent('Reloading Playable iframe…');
+        frame.contentWindow.location.reload();
+      });
+    </script>
+  </body>
+</html>
