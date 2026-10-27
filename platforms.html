@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pulse · Boxing Career — Multi-Platform Free-to-Play Distribution Hub</title>
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+    <style>
+      :root {
+        --bg: #0b0e16;
+        --card: #151a26;
+        --elevated: #1d2434;
+        --border: rgba(255, 255, 255, 0.12);
+        --mint: #18e2b5;
+        --gold: #f5c542;
+        --red: #ff0033;
+        --text: #f3f5fa;
+        --muted: #9ba3b8;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: radial-gradient(circle at 50% 0%, #1a243a 0%, #0b0e16 70%);
+        color: var(--text);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        min-height: 100dvh;
+        padding-bottom: 48px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 16px 28px;
+        background: rgba(15, 19, 29, 0.92);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .badge {
+        padding: 4px 10px;
+        border-radius: 6px;
+        background: rgba(24, 226, 181, 0.18);
+        border: 1px solid rgba(24, 226, 181, 0.45);
+        color: var(--mint);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .container {
+        max-width: 1240px;
+        margin: 28px auto;
+        padding: 0 20px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 16px;
+        margin-top: 18px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.42);
+      }
+      .card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .card h3 {
+        margin: 0;
+        font-size: 17px;
+      }
+      .sdk-pill {
+        font-size: 10.5px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 99px;
+        background: rgba(245, 197, 66, 0.16);
+        color: var(--gold);
+        border: 1px solid rgba(245, 197, 66, 0.36);
+      }
+      .card p {
+        margin: 0;
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+      .steps {
+        margin: 4px 0;
+        padding-left: 18px;
+        font-size: 12.5px;
+        color: #d5dbea;
+        line-height: 1.5;
+      }
+      .actions {
+        margin-top: auto;
+        padding-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .btn {
+        appearance: none;
+        border: 1px solid var(--border);
+        background: var(--elevated);
+        color: var(--text);
+        padding: 8px 13px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .btn:hover {
+        border-color: rgba(255, 255, 255, 0.32);
+        background: #283146;
+      }
+      .btn-mint {
+        background: linear-gradient(135deg, #18e2b5 0%, #0f9b7c 100%);
+        color: #061410;
+        border-color: #18e2b5;
+      }
+      .btn-mint:hover {
+        background: #3bf0c7;
+      }
+      .btn-red {
+        background: var(--red);
+        border-color: var(--red);
+        color: #fff;
+      }
+      .meta-box {
+        margin-top: 24px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 20px;
+      }
+      .meta-row {
+        display: grid;
+        grid-template-columns: 180px 1fr auto;
+        gap: 10px;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        font-size: 13px;
+      }
+      .meta-row code {
+        background: #0d111a;
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        color: #dfe5f2;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <span class="badge">Free-to-Play + Rewarded Ads</span>
+        <strong style="font-size:17px">Pulse · Boxing Career — All-Platform Publisher Hub</strong>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a class="btn btn-mint" href="./index.html">🎮 Play Live Game</a>
+        <a class="btn btn-red" href="./youtube-playables.html">▶ YouTube Playables Player</a>
+      </div>
+    </header>
+
+    <div class="container">
+      <h2 style="margin:0 0 6px">6 Platform-Ready Free-to-Play + Ad Bundles</h2>
+      <p style="margin:0;color:var(--muted);font-size:14px">
+        Each ZIP bundle has <code>index.html</code> at the root, relative asset paths, and platform-specific Rewarded Ad SDK hooks wired to both in-game ad placements (<strong>2× Post-Fight/Drill Purse Doubler</strong> and <strong>Career Hub +250 Cash Sponsor Ad</strong>).
+      </p>
+
+      <div class="grid">
+        <!-- 1. YouTube Playables -->
+        <article class="card">
+          <div class="card-top">
+            <h3>1. YouTube Playables</h3>
+            <span class="sdk-pill">ytgame v1 SDK · Certified</span>
+          </div>
+          <p>Strictly compliant with Google's Playables policy: uses only <code>ytgame.ads.requestRewardedAd</code> and <code>ytgame.game.saveData</code> with zero external scripts.</p>
+          <ol class="steps">
+            <li>Submit the pre-filled Google Partner Form below.</li>
+            <li>Upload <code>pulse-youtube-playables-bundle.zip</code> in the Playables Portal.</li>
+          </ol>
+          <div class="actions">
+            <a class="btn btn-mint" href="./releases/pulse-youtube-playables-bundle.zip" download>⬇️ Download ZIP (895 KB)</a>
+            <a class="btn btn-red" href="https://docs.google.com/forms/d/e/1FAIpQLSdvdQ0lgIq2369aemj1O6w8R8FwGn9O5ARRGODDDUbVINCRJQ/viewform?usp=pp_url&entry.946202806=I+understand+the+bullet+points+listed+above.&entry.1238541471=Game+development+tool%2Fdocumentation&entry.294700704=N%2FA&entry.910090299=N%2FA&entry.1755701106=Hrushikesh+Patil&entry.368585535=Independent+Game+Developer&entry.1176360689=patilrishi1998%40gmail.com&entry.721051248=Pulse%3A+Boxing+Career+%E2%80%94+Live+Hosted+Game%3A+https%3A%2F%2Fpatilrishi1998-hru.github.io%2Fpulse-boxing-playables%2F+%7C+YouTube+Playables+SDK+Showcase%3A+https%3A%2F%2Fpatilrishi1998-hru.github.io%2Fpulse-boxing-playables%2Fyoutube-playables.html&entry.1300231576=1&entry.1134148822=Pulse%3A+Boxing+Career+is+a+3D+HTML5%2FWebGL+%28Three.js+%2B+TypeScript%29+boxing+%26+career+management+game+built+natively+for+YouTube+Playables+%28895+KB+ZIP+bundle%2C+full+ytgame+v1+SDK+integration%3A+firstFrameReady%2C+gameReady%2C+cloud+saves+via+saveData%2FloadData%2C+pause%2Fresume%2Faudio+lifecycle+hooks%2C+engagement+score+reporting%2C+and+rewarded+ads%29.+Includes+8+distinct+3D+punch+animations%2C+signature+3-step+combo+rows%2C+rhythm+training+drills+%28Heavy+Bag%2C+Jump+Rope%2C+Counter+Lab%29%2C+5+championship+leagues%2C+15+rivals%2C+and+Blender+4.5+3D+showcases.&entry.398088026=1%2B+%281+-+100%29&entry.2114582028=Web+%28Facebook%2C+Itch.io%2C+etc.%29&entry.1496190260=Build+community&entry.1496190260=Exposure&entry.1496190260=Monetization" target="_blank" rel="noopener">📝 Pre-Filled Application ↗</a>
+          </div>
+        </article>
+
+        <!-- 2. Itch.io -->
+        <article class="card">
+          <div class="card-top">
+            <h3>2. Itch.io (Instant Live Publish)</h3>
+            <span class="sdk-pill">HTML5 + F2P Sponsor Ads</span>
+          </div>
+          <p>Goes live immediately with zero review wait. Includes built-in Free-to-Play Sponsor Broadcast Rewarded Ads and automatic <code>localStorage</code> career saves.</p>
+          <ol class="steps">
+            <li>Click <strong>Upload on Itch.io ↗</strong>, set <em>Kind of project</em> to <strong>HTML</strong>, Pricing to <strong>$0 / Donate</strong>.</li>
+            <li>Upload <code>pulse-itch-io-bundle.zip</code> and check <em>"This file will be played in the browser"</em> + <strong>Fullscreen button</strong> + <strong>Mobile friendly</strong>.</li>
+          </ol>
+          <div class="actions">
+            <a class="btn btn-mint" href="./releases/pulse-itch-io-bundle.zip" download>⬇️ Download Itch.io ZIP</a>
+            <a class="btn" href="https://itch.io/game/new" target="_blank" rel="noopener">🚀 Upload on Itch.io ↗</a>
+          </div>
+        </article>
+
+        <!-- 3. CrazyGames -->
+        <article class="card">
+          <div class="card-top">
+            <h3>3. CrazyGames</h3>
+            <span class="sdk-pill">CrazyGames SDK v3 Ads</span>
+          </div>
+          <p>Pre-wired with <code>crazygames-sdk-v3.js</code>: automatically calls <code>CrazyGames.SDK.ad.requestAd('rewarded')</code> with gameplay & audio pause/resume.</p>
+          <ol class="steps">
+            <li>Open the CrazyGames Developer Portal and click <strong>Submit Game</strong>.</li>
+            <li>Upload <code>pulse-crazygames-bundle.zip</code>.</li>
+          </ol>
+          <div class="actions">
+            <a class="btn btn-mint" href="./releases/pulse-crazygames-bundle.zip" download>⬇️ Download CrazyGames ZIP</a>
+            <a class="btn" href="https://developer.crazygames.com/" target="_blank" rel="noopener">🚀 CrazyGames Portal ↗</a>
+          </div>
+        </article>
+
+        <!-- 4. Poki -->
+        <article class="card">
+          <div class="card-top">
+            <h3>4. Poki</h3>
+            <span class="sdk-pill">PokiSDK v2 Rewarded Break</span>
+          </div>
+          <p>Pre-wired with <code>poki-sdk.js</code>: calls <code>PokiSDK.init()</code>, <code>gameLoadingFinished()</code>, and <code>PokiSDK.rewardedBreak()</code> for all cash bonuses.</p>
+          <ol class="steps">
+            <li>Open Poki for Developers and share your live link or upload <code>pulse-poki-bundle.zip</code>.</li>
+          </ol>
+          <div class="actions">
+            <a class="btn btn-mint" href="./releases/pulse-poki-bundle.zip" download>⬇️ Download Poki ZIP</a>
+            <a class="btn" href="https://developers.poki.com/" target="_blank" rel="noopener">🚀 Poki Developers ↗</a>
+          </div>
+        </article>
+
+        <!-- 5. Newgrounds & GameJolt -->
+        <article class="card">
+          <div class="card-top">
+            <h3>5. Newgrounds & GameJolt</h3>
+            <span class="sdk-pill">Instant HTML5 Portals</span>
+          </div>
+          <p>Instant self-service publishing with iframe key-scroll lock (`Space` / arrow keys stay inside the ring) and built-in Free-to-Play Rewarded Ads.</p>
+          <ol class="steps">
+            <li>Upload <code>pulse-newgrounds-gamejolt-bundle.zip</code>, set resolution to <code>1280 × 720</code> (responsive).</li>
+          </ol>
+          <div class="actions">
+            <a class="btn btn-mint" href="./releases/pulse-newgrounds-gamejolt-bundle.zip" download>⬇️ Download NG / GJ ZIP</a>
+            <a class="btn" href="https://www.newgrounds.com/projects/games/new" target="_blank" rel="noopener">🚀 Newgrounds ↗</a>
+            <a class="btn" href="https://gamejolt.com/dashboard/games/add" target="_blank" rel="noopener">🚀 GameJolt ↗</a>
+          </div>
+        </article>
+
+        <!-- 6. GameDistribution -->
+        <article class="card">
+          <div class="card-top">
+            <h3>6. GameDistribution Ad Network</h3>
+            <span class="sdk-pill">gdsdk Rewarded Video</span>
+          </div>
+          <p>Pre-wired for <code>window.gdsdk.showAd('rewarded')</code> to distribute across ribuan HTML5 web portals with automatic ad revenue share.</p>
+          <ol class="steps">
+            <li>Upload <code>pulse-gamedistribution-bundle.zip</code> in the GameDistribution developer dashboard.</li>
+          </ol>
+          <div class="actions">
+            <a class="btn btn-mint" href="./releases/pulse-gamedistribution-bundle.zip" download>⬇️ Download GD ZIP</a>
+            <a class="btn" href="https://gamedistribution.com/developers" target="_blank" rel="noopener">🚀 GameDistribution ↗</a>
+          </div>
+        </article>
+      </div>
+
+      <section class="meta-box">
+        <h3 style="margin:0 0 8px">Store Cover Thumbnails & Screenshots (Required by All Portals)</h3>
+        <p style="margin:0 0 12px;color:var(--muted);font-size:13px">
+          Every portal asks for a Cover Image + Screenshots alongside your <code>.zip</code> file. Download them below (or grab them directly from your Finder <code>releases/</code> folder):
+        </p>
+        <div class="actions" style="margin-bottom:16px">
+          <a class="btn btn-mint" href="./releases/cover-itch-630x500.png" download>🖼️ Itch.io Cover (630×500)</a>
+          <a class="btn btn-mint" href="./releases/cover-landscape-1920x1080.png" download>🖼️ Landscape Cover (1920×1080 16:9)</a>
+          <a class="btn btn-mint" href="./releases/cover-portrait-800x1200.png" download>🖼️ Portrait Cover (800×1200 2:3)</a>
+          <a class="btn btn-mint" href="./releases/cover-square-800x800.png" download>🖼️ Square Icon (800×800 1:1)</a>
+          <a class="btn" href="./releases/screenshot-1-world-ring.png" download>📸 Screenshot 1 (Ring)</a>
+          <a class="btn" href="./releases/screenshot-2-training-gym.png" download>📸 Screenshot 2 (Gym)</a>
+          <a class="btn" href="./releases/screenshot-3-fight-hud.png" download>📸 Screenshot 3 (HUD)</a>
+        </div>
+
+        <h3 style="margin:0 0 12px">Copy-Paste Store Listing Metadata (For All Portals)</h3>
+        <div class="meta-row">
+          <strong>Game Title</strong>
+          <code id="cp-title">Pulse · Boxing Career</code>
+          <button class="btn" onclick="navigator.clipboard.writeText(document.getElementById('cp-title').textContent)">📋 Copy</button>
+        </div>
+        <div class="meta-row">
+          <strong>Short Tagline</strong>
+          <code id="cp-short">Step into Vale Boxing Club. Master 8 3D punches, signature combos, rhythm drills, and climb 5 championship leagues.</code>
+          <button class="btn" onclick="navigator.clipboard.writeText(document.getElementById('cp-short').textContent)">📋 Copy</button>
+        </div>
+        <div class="meta-row">
+          <strong>Genre / Tags</strong>
+          <code id="cp-tags">Sports, Boxing, Action, Rhythm, 3D, Career, Arcade, Free-to-Play</code>
+          <button class="btn" onclick="navigator.clipboard.writeText(document.getElementById('cp-tags').textContent)">📋 Copy</button>
+        </div>
+        <div class="meta-row">
+          <strong>Viewport / Size</strong>
+          <code id="cp-size">1280 x 720 (Responsive 16:9 Desktop & 9:16 Mobile Portrait/Landscape)</code>
+          <button class="btn" onclick="navigator.clipboard.writeText(document.getElementById('cp-size').textContent)">📋 Copy</button>
+        </div>
+        <div class="meta-row" style="border-bottom:0">
+          <strong>Live Public URL</strong>
+          <code id="cp-url">https://patilrishi1998-hru.github.io/pulse-boxing-playables/</code>
+          <button class="btn" onclick="navigator.clipboard.writeText(document.getElementById('cp-url').textContent)">📋 Copy</button>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
